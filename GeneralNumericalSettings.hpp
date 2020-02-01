@@ -1,5 +1,7 @@
 #pragma once
 
+#include <functional>
+
 // this type is going to be used in any numerical calculation
 // you can change it to long double, if you need more precision. 
 typedef double myDouble;
