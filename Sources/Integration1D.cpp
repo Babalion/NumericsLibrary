@@ -18,7 +18,7 @@ Integrand1D::Integrand1D(int numDataPoints, myDouble begin, myDouble end, f_myDo
 
 //constructs an Integrand1D with given stepSize and beginValue
 Integrand1D::Integrand1D(int numDataPoints, myDouble begin, f_myDouble const f, myDouble stepSize) :
-	numDataPoints(numDataPoints), begin(begin), stepSize(stepSize), f(f) {
+	numDataPoints(numDataPoints), stepSize(stepSize),begin(begin), f(f) {
 	if (numDataPoints == 0 || stepSize == 0 || f == nullptr) {
 		std::cerr << "Integrand_Begin/Stepsize_Constructor: wrong parameters!\n";
 		std::cin.get();

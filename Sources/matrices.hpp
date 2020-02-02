@@ -99,12 +99,12 @@ DynamicMatrix<mEnt>::DynamicMatrix(unsigned int _rows, unsigned int _columns) {
 	rows = _rows;
 	columns = _columns;
 	data = new mEnt*[rows];
-	for (int i = 0; i < rows; ++i)
+	for (unsigned int i = 0; i < rows; ++i)
 		data[i] = new mEnt[columns];
 
 	//init all with 0
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++) {
+	for (unsigned int i = 0; i < rows; i++) {
+		for (unsigned int j = 0; j < columns; j++) {
 			data[i][j] = 0;
 		}
 	}
@@ -116,12 +116,12 @@ DynamicMatrix<mEnt>::DynamicMatrix(const DynamicMatrix<mEnt> &other) {
 	rows = other.rows;
 	columns = other.columns;
 	data = new mEnt*[rows];
-	for (int i = 0; i < rows; ++i) {
+	for (unsigned int i = 0; i < rows; ++i) {
 		data[i] = new mEnt[columns];
 	}
 
-	for (int i = 0; i < rows; ++i) {
-		for (int j = 0; j < columns; ++j)
+	for (unsigned int i = 0; i < rows; ++i) {
+		for (unsigned int j = 0; j < columns; ++j)
 		{
 			data[i][j] = other.data[i][j];
 		}
@@ -132,7 +132,7 @@ DynamicMatrix<mEnt>::DynamicMatrix(const DynamicMatrix<mEnt> &other) {
 template<typename mEnt>
 DynamicMatrix<mEnt>::~DynamicMatrix() {
 	//delete each sub-array
-	for (int i = 0; i < rows; ++i) {
+	for (unsigned int i = 0; i < rows; ++i) {
 		delete[] data[i];
 	}
 	//delete the array of pointers
@@ -194,9 +194,9 @@ bool DynamicMatrix<mEnt>::isUpperTriangular() {
 		std::cout << "Matrix is not quadratic" << std::endl;
 		return false;
 	}
-	for (int i = 0; i < rows; i++)
+	for (unsigned int i = 0; i < rows; i++)
 	{
-		for (int j = 0; j < columns; j++)
+		for (unsigned int j = 0; j < columns; j++)
 		{
 			if (i > j && data[i][j] != 0) {
 				std::cout << i << "," << j << std::endl;
@@ -282,19 +282,19 @@ DynamicMatrix<mEnt> DynamicMatrix<mEnt>::operator*(const DynamicMatrix &other) {
 template<typename mEnt>
 DynamicMatrix<mEnt>& DynamicMatrix<mEnt>::operator=(const DynamicMatrix &other) {
 	if (rows != other.rows || columns != other.columns) {
-		for (int i = 0; i < rows; ++i) {
+		for (unsigned int i = 0; i < rows; ++i) {
 			delete[] data[i];
 		}
 		delete[] data;
 		rows = other.rows;
 		columns = other.columns;
 		data = new mEnt*[rows];
-		for (int i = 0; i < rows; ++i)
+		for (unsigned int i = 0; i < rows; ++i)
 			data[i] = new mEnt[columns];
 	}
 
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < columns; j++)
+	for (unsigned int i = 0; i < rows; i++) {
+		for (unsigned int j = 0; j < columns; j++)
 		{
 			data[i][j] = other.data[i][j];
 		}

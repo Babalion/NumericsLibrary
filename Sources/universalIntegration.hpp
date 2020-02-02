@@ -44,11 +44,11 @@ template <typename... Args>
 class NdimIntegrand
 {
 private:
-    //the number of dimensions to integrate over
-    unsigned int dim;
     std::function<myDouble(Args...)> func;
     Integrand1D *nIntegrandsArr;
     f_Integrator integrator;
+    //the number of dimensions to integrate over
+    unsigned int dim;
 
 public:
     NdimIntegrand(std::function<myDouble(Args...)> func_with_n_params,
