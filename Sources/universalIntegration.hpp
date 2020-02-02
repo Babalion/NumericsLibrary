@@ -12,23 +12,25 @@
 */
 // OTHER FUNCTIONS
 
-double redDim(const std::function<double(double)> &f, Integrand1D *nIntegrandsArr, f_Integrator integ)
+double redDim(const std::function<double(double)> f, Integrand1D nIntegrandsArr[], f_Integrator integ)
 {
     Integrand1D thisInt = Integrand1D(
-        nIntegrandsArr->getNumDataPoints(),
-        nIntegrandsArr->getBegin(),
-        nIntegrandsArr->getEnd(),
+        nIntegrandsArr[0].getNumDataPoints(),
+        nIntegrandsArr[0].getBegin(),
+        nIntegrandsArr[0].getEnd(),
         f);
+        //std::cout<<"Eingabe: "<<nIntegrandsArr[0].getNumDataPoints()<<", gespeichert: "<<thisInt.getNumDataPoints()<<std::endl;
     
     return integ(thisInt).solution;
 }
 
 template <typename Tfirst = double, typename... Trest>
-auto redDim(const std::function<double(Tfirst first, Trest... rest)> &f, Integrand1D *nIntegrandsArr, f_Integrator integ)
+auto redDim(const std::function<double(Tfirst first, Trest... rest)> f, Integrand1D *nIntegrandsArr, f_Integrator integ)
 {
+    std::cout<<"In recursion"<<std::endl;
     return redDim(std::function<double(Trest...)>{
                       [=](Trest... R) -> double { return redDim([=](double x) { return f(x, R...); }, nIntegrandsArr, integ); }},
-                  nIntegrandsArr + 1, integ);
+                  &nIntegrandsArr[1], integ);
 }
 
 template <typename... Args>
