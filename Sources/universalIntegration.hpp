@@ -10,19 +10,15 @@
     Furthermore, it adds various procedures of solving one dimensional integrals.
 
 */
-// OTHER FUNCTIONS
 
-double redDim(const std::function<double(double)> f, Integrand1D nIntegrandsArr[], f_Integrator integ)
-{
-    Integrand1D thisInt = Integrand1D(
-        nIntegrandsArr[0].getNumDataPoints(),
-        nIntegrandsArr[0].getBegin(),
-        nIntegrandsArr[0].getEnd(),
-        f);
-    
-    return integ(thisInt).solution;
-}
+//--------------------------------------------------------------------------------------------------------------------------
+// GENERAL FUNCTIONS
+//--------------------------------------------------------------------------------------------------------------------------
 
+//Base
+double redDim(const std::function<double(double)> f, Integrand1D nIntegrandsArr[], f_Integrator integ);
+
+//Recursion
 template <typename Tfirst = double, typename... Trest>
 auto redDim(const std::function<double(Tfirst first, Trest... rest)> f, Integrand1D *nIntegrandsArr, f_Integrator integ)
 {
@@ -38,6 +34,8 @@ auto redDim(double (*f)(Args...), Integrand1D *nIntegrandsArr, f_Integrator inte
     return redDim(std::function<double(Args...)>{f}, nIntegrandsArr, integ);
 }
 
+//--------------------------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------------------------
 /*
     This is a general class for integrating a n-dimensional function
 */
@@ -64,6 +62,9 @@ public:
     myDouble integrate();
 };
 
+//-------------------------------------------------------------------------------------------
+//CONSTRUCTOR implementation
+//-------------------------------------------------------------------------------------------
 template <typename... Args>
 NdimIntegrand<Args...>::NdimIntegrand(std::function<myDouble(Args...)> func_with_n_params,
                                       f_Integrator integrator,
@@ -77,7 +78,7 @@ template <typename... Args>
 NdimIntegrand<Args...>::~NdimIntegrand() {}
 
 //--------------------------------------------------------------------------------------
-//Methods
+//Methods implementation
 //--------------------------------------------------------------------------------------
 template <typename... Args>
 myDouble NdimIntegrand<Args...>::integrate()
