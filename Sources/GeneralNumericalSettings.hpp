@@ -8,3 +8,4 @@ typedef double myDouble;
 
 // a simple real-function from R->R
 typedef std::function<myDouble(myDouble)> f_myDouble;
+typedef std::function<myDouble(myDouble,myDouble,myDouble)> f3_myDouble;

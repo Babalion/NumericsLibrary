@@ -19,7 +19,6 @@ double redDim(const std::function<double(double)> f, Integrand1D nIntegrandsArr[
         nIntegrandsArr[0].getBegin(),
         nIntegrandsArr[0].getEnd(),
         f);
-        //std::cout<<"Eingabe: "<<nIntegrandsArr[0].getNumDataPoints()<<", gespeichert: "<<thisInt.getNumDataPoints()<<std::endl;
     
     return integ(thisInt).solution;
 }
