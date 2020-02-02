@@ -44,6 +44,9 @@ struct SolutionIntegration {
 	myDouble error = 0;
 };
 
+
+typedef std::function<SolutionIntegration(Integrand1D)> f_Integrator;
+
 //fills an Array with a given function 'f', from 'start' 'numberPoints' times with 'stepsize' 
 //returns a pointer to the array on heap
 // remember deleting it!

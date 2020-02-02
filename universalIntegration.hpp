@@ -1,5 +1,4 @@
 #pragma once
-
 #include <math.h>
 #include <functional>
 #include "GeneralNumericalSettings.hpp"
@@ -11,6 +10,32 @@
     Furthermore, it adds various procedures of solving one dimensional integrals.
 
 */
+// OTHER FUNCTIONS
+
+double redDim(const std::function<double(double)> &f, Integrand1D *nIntegrandsArr, f_Integrator integ)
+{
+    Integrand1D thisInt = Integrand1D(
+        nIntegrandsArr->getNumDataPoints(),
+        nIntegrandsArr->getBegin(),
+        nIntegrandsArr->getEnd(),
+        f);
+    
+    return integ(thisInt).solution;
+}
+
+template <typename Tfirst = double, typename... Trest>
+auto redDim(const std::function<double(Tfirst first, Trest... rest)> &f, Integrand1D *nIntegrandsArr, f_Integrator integ)
+{
+    return redDim(std::function<double(Trest...)>{
+                      [=](Trest... R) -> double { return redDim([=](double x) { return f(x, R...); }, nIntegrandsArr, integ); }},
+                  nIntegrandsArr + 1, integ);
+}
+
+template <typename... Args>
+auto redDim(double (*f)(Args...), Integrand1D *nIntegrandsArr, f_Integrator integ)
+{
+    return redDim(std::function<double(Args...)>{f}, nIntegrandsArr, integ);
+}
 
 /*
     This is a general class for integrating a n-dimensional function
@@ -23,10 +48,13 @@ private:
     unsigned int dim;
     std::function<myDouble(Args...)> func;
     Integrand1D *nIntegrandsArr;
-    std::function<SolutionIntegration(Integrand1D)> integrator;
+    f_Integrator integrator;
 
 public:
-    NdimIntegrand(std::function<myDouble(Args...)> func_with_n_params, std::function<SolutionIntegration(Integrand1D)> integrator, Integrand1D *nIntegrandsArr, unsigned int dim);
+    NdimIntegrand(std::function<myDouble(Args...)> func_with_n_params,
+                  f_Integrator integrator,
+                  Integrand1D *nIntegrandsArr,
+                  unsigned int dim);
     ~NdimIntegrand();
 
     //--------------------------------------------------------------------------------------
@@ -37,7 +65,7 @@ public:
 
 template <typename... Args>
 NdimIntegrand<Args...>::NdimIntegrand(std::function<myDouble(Args...)> func_with_n_params,
-                                      std::function<SolutionIntegration(Integrand1D)> integrator,
+                                      f_Integrator integrator,
                                       Integrand1D *nIntegrandsArr,
                                       unsigned int dim) : func(func_with_n_params),
                                                           nIntegrandsArr(nIntegrandsArr),
@@ -50,41 +78,8 @@ NdimIntegrand<Args...>::~NdimIntegrand() {}
 //--------------------------------------------------------------------------------------
 //Methods
 //--------------------------------------------------------------------------------------
-
-//Base-Template for Endrecursion and integrating a function with one parameter
-myDouble redDim(const std::function<myDouble(myDouble)> f, Integrand1D *integrands, std::function<SolutionIntegration(Integrand1D)> integrator)
-{
-    Integrand1D integ = Integrand1D(integrands[1].getNumDataPoints(), integrands[1].getBegin(), integrands[1].getEnd(), f);
-    myDouble retVal = integrator(integ).solution;
-    return retVal;
-}
-
-// Recursion
-template <typename Tfirst, typename... Trest>
-auto redDim(std::function<myDouble(Tfirst first, Trest... rest)> f, Integrand1D *integrands, std::function<SolutionIntegration(Integrand1D)> integrator)
-{
-    return redDim(
-        std::function<myDouble(Trest...)>{
-            [=](Trest... R) {
-                return redDim(
-                    std::function<myDouble(myDouble)>{
-                        [=](myDouble x) { return f(x, R...); }},
-                    integrands,
-                    integrator);
-            }},
-        &integrands[1],
-        integrator);
-}
-
-template <typename... Args>
-auto redDim(myDouble (*f)(Args...), Integrand1D *integrands, std::function<SolutionIntegration(Integrand1D)> integrator)
-{
-    return redDim(std::function<myDouble(Args...)>{f}, integrands, integrator);
-}
-
 template <typename... Args>
 myDouble NdimIntegrand<Args...>::integrate()
 {
-
-    return 0;
+    return redDim(func, nIntegrandsArr, integrator);
 }
