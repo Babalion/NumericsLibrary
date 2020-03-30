@@ -75,6 +75,6 @@ void Vec3Dsp::setZ(myDouble _z){
 //................................................
 
 //calculates the distance between another spherical vector
-double Vec3Dsp::calcDistance(Vec3Dsp other){
-    return sqrt(pow(x-other.x,2)+pow(y-other.y,2)+pow(z-other.z,2));
+double Vec3Dsp::calcDistance(Vec3Dsp *other){
+    return sqrt(pow(x-other->x,2)+pow(y-other->y,2)+pow(z-other->z,2));
 }

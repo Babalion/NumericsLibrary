@@ -30,5 +30,5 @@ void setZ(myDouble);
 
 //methods
 
-    myDouble calcDistance(Vec3Dsp);
+    myDouble calcDistance(Vec3Dsp*);
 };

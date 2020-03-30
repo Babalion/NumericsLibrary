@@ -22,7 +22,7 @@ double redDim(const std::function<double(double)> f, Integrand1D nIntegrandsArr[
 template <typename Tfirst = double, typename... Trest>
 auto redDim(const std::function<double(Tfirst first, Trest... rest)> f, Integrand1D *nIntegrandsArr, f_Integrator integ)
 {
-    std::cout<<"In recursion"<<std::endl;
+    //std::cout<<"In recursion"<<std::endl;
     return redDim(std::function<double(Trest...)>{
                       [=](Trest... R) -> double { return redDim([=](double x) { return f(x, R...); }, nIntegrandsArr, integ); }},
                   &nIntegrandsArr[1], integ);
